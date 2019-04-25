@@ -181,7 +181,7 @@ public class UserServices {
 	@POST
 	@Path("/donate")
 	public Response Donate(DonationModel dm) {
-		System.out.println("donation made");
+		System.out.println(dm.toString());
 		DonorDao dao = new DonorDao();
 		if(dao.Donate(dm))
 			return Response.ok().build();

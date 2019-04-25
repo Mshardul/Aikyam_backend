@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import Aikyam.conn.ConnectionUtil;
-import Aikyam.pojo.Donation;
 import Aikyam.pojo.DonationModel;
 import Aikyam.pojo.Donor;
 import Aikyam.pojo.LoginModel;
@@ -178,27 +177,32 @@ public class DonorDao {
 	
 	public boolean Donate(DonationModel dm) {
 		Connection conn;
+		System.out.println(dm.toString());
 		int donorId = dm.getDonorId();
 		boolean isAnon = false;
 		if(dm.getIsAnon()==1)
 			isAnon = true;
-		ArrayList<Donation> donations = dm.getDonations();
-
+		ArrayList<String> iNameList = dm.getI_name();
+		ArrayList<Integer> qtyList = dm.getQty();
 		String itemName;
-		int qty;
+		
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String today = (dateFormat.format(date)).toString();
 		
 		conn = ConnectionUtil.GetConn();
 		
-		int n=donations.size();
+		int n=iNameList.size();
+		System.out.println(n);
+		int qty;
+		
 		for(int i=0; i<n; i++) {
-			itemName = (donations.get(i)).GetItemName();
-			qty = (donations.get(i)).GetQty();
+			itemName = (iNameList.get(i)).toString();
+			qty = (qtyList.get(i));
 			int itemId = -1;
 			try {
-				String sql_select = "SELECT i_id FROM ITEM WHERE i_name="+itemName+";";
+				String sql_select = "SELECT i_id FROM ITEM WHERE i_name='"+itemName+"';";
+				System.out.println(sql_select);
 				PreparedStatement stmt = conn.prepareStatement(sql_select);
 				ResultSet resSet = stmt.executeQuery();
 				while(resSet.next()) {
@@ -207,7 +211,7 @@ public class DonorDao {
 				}
 				if(itemId!=-1) {
 					String sql_insert = "INSERT INTO DONATIONMADE (d_id, i_id, qty, isAnon, donatedOn)";
-					sql_insert += "VALUES ("+Integer.toString(donorId)+", "+Integer.toString(itemId)+", "+Integer.toString(qty)+", "+String.valueOf(isAnon)+", "+today+";";
+					sql_insert += "VALUES ("+Integer.toString(donorId)+", "+Integer.toString(itemId)+", "+Integer.toString(qty)+", "+String.valueOf(isAnon)+", '"+today+"');";
 					System.out.println(sql_insert);
 					PreparedStatement stmt_insert = conn.prepareStatement(sql_insert);
 					stmt_insert.executeUpdate();

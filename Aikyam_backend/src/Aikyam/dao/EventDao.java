@@ -11,6 +11,7 @@ import java.util.Date;
 import Aikyam.conn.ConnectionUtil;
 import Aikyam.pojo.Event;
 import Aikyam.pojo.EventModel;
+import Aikyam.pojo.UpdateEventItem;
 
 public class EventDao {
 
@@ -152,4 +153,45 @@ public class EventDao {
 			return false;
 		}
 	}
-}
+	
+	public boolean UpdateItemQty(UpdateEventItem uei) {
+		int e_id = uei.getE_id();
+		String c_name = uei.getC_name();
+		ArrayList<String> iNameList = uei.getI_name();
+		ArrayList<Integer> qtyList = uei.getQty();
+		
+		Connection conn = null;
+		String sql_select = "";
+		String sql_insert = "";
+		int i_id = -1;
+		
+		int n = iNameList.size();
+		System.out.println(n);
+		for(int i=0; i<n; i++) {
+			String iName = iNameList.get(i);
+			int qty = qtyList.get(i);
+			
+			try {
+				conn = ConnectionUtil.GetConn();
+				sql_select = "SELECT i_id FROM ITEM WHERE i_name = '"+iName+"';";
+				System.out.println(sql_select);
+				PreparedStatement stmt = conn.prepareStatement(sql_select);
+				ResultSet resSet = stmt.executeQuery();
+				while(resSet.next()) {
+					i_id = resSet.getInt(1);
+					break;
+				}
+					
+				sql_insert = "INSERT INTO CHARITYRECEIVED (e_id, c_name, i_id, qty)";
+				sql_insert += " VALUES("+Integer.toString(e_id)+", '"+c_name+"', "+Integer.toString(i_id)+", "+qty+");";
+				System.out.println(sql_insert);
+				stmt = conn.prepareStatement(sql_insert);
+				stmt.executeUpdate();
+				}catch(Exception e) {
+					System.out.println(e);
+					return false;
+				}
+			}
+			return true;
+		}
+	}

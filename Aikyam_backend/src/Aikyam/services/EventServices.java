@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import Aikyam.dao.EventDao;
 import Aikyam.pojo.Event;
 import Aikyam.pojo.EventModel;
+import Aikyam.pojo.UpdateEventItem;
 
 @Path("/event")
 public class EventServices {
@@ -81,6 +82,17 @@ public class EventServices {
 		System.out.println(e.toString());
 		EventDao doa = new EventDao();
 		Boolean x = doa.UpdateInfo(e);
+		if(x)
+			return Response.ok().build();
+		return Response.status(Response.Status.BAD_REQUEST).build();
+	}
+	
+	@POST
+	@Path("/updateItem")
+	public Response UpdateItemQty(UpdateEventItem uei) {
+		System.out.println("updating event item");
+		EventDao dao = new EventDao();
+		Boolean x = dao.UpdateItemQty(uei);
 		if(x)
 			return Response.ok().build();
 		return Response.status(Response.Status.BAD_REQUEST).build();

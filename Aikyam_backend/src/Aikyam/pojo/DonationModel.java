@@ -4,25 +4,29 @@ import java.util.ArrayList;
 
 public class DonationModel {
 
-	public DonationModel(ArrayList<Donation> donations, int isAnon, int donorId) {
-		this.setDonations(donations);
+	public DonationModel(ArrayList<String> iName, ArrayList<Integer> qty, int isAnon, int donorId) {
+		this.setI_name(iName);
+		this.setQty(qty);
 		this.setIsAnon(isAnon);
 		this.setDonorId(donorId);
 	}
 	
 	public DonationModel() {
 		// TODO Auto-generated constructor stub
+		iName = new ArrayList<String>();
+		qty = new ArrayList<Integer>();
 	}
 	
-	private ArrayList<Donation> donations = new ArrayList<Donation>();
+	private ArrayList<String> iName;
+	private ArrayList<Integer> qty;
 	private int isAnon;
 	private int donorId;
 	
-	public ArrayList<Donation> getDonations() {
-		return donations;
+	public ArrayList<Integer> getQty() {
+		return this.qty;
 	}
-	public void setDonations(ArrayList<Donation> donations) {
-		this.donations = donations;
+	public void setQty(ArrayList<Integer> qty) {
+		this.qty = qty;
 	}
 
 	public int getIsAnon() {
@@ -39,5 +43,29 @@ public class DonationModel {
 
 	public void setDonorId(int donorId) {
 		this.donorId = donorId;
+	}
+	
+	public String toString() {
+		String ret = "";
+		int n = iName.size();
+		if(iName.isEmpty())
+			ret+=" no item ";
+		System.out.println(n);
+		for(int i=0; i<n; i++)
+			ret+=iName.get(i)+" ";
+		int m = qty.size();
+		for(int i=0; i<m; i++)
+			ret+=qty.get(i)+" ";
+		ret += Integer.toString(isAnon)+" ";
+		ret += Integer.toString(donorId);
+		return ret;
+	}
+
+	public ArrayList<String> getI_name() {
+		return iName;
+	}
+
+	public void setI_name(ArrayList<String> iName) {
+		this.iName= iName;
 	}
 }
